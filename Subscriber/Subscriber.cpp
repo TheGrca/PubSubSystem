@@ -52,12 +52,10 @@ void ChooseSubscription(SubscriberData* subscriber, const char** topics, int top
 }
 
 void SendSubscriptionToServer(SubscriberData* subscriber) {
-    char buffer[64];
-    snprintf(buffer, sizeof(buffer), "%s|%d",
-        subscriber->subscription.topic,
-        subscriber->subscription.location);
-
-    int bytesSent = send(subscriber->connectSocket, buffer, strlen(buffer), 0);
+    int bytesSent = send(subscriber->connectSocket,
+        (char*)&subscriber->subscription,
+        sizeof(SubscribedTo),
+        0);
     if (bytesSent == SOCKET_ERROR) {
         printf("Failed to send subscription to server.\n");
     }
@@ -110,7 +108,7 @@ int main() {
 
     sockaddr_in serverAddress;
     serverAddress.sin_family = AF_INET;
-    serverAddress.sin_port = htons(27016);
+    serverAddress.sin_port = htons(27017);
 
     if (InetPton(AF_INET, L"127.0.0.1", &serverAddress.sin_addr) <= 0) {
         printf("Invalid address.\n");

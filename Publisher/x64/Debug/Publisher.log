@@ -1,3 +1,0 @@
-﻿  Publisher.cpp
-C:\Users\bukva\source\repos\TheGrca\PubSubSystem\Publisher\Publisher.cpp(102,42): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-  Publisher.vcxproj -> C:\Users\bukva\source\repos\TheGrca\PubSubSystem\x64\Debug\Publisher.exe

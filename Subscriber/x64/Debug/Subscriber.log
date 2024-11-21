@@ -1,3 +1,0 @@
-﻿  Subscriber.cpp
-C:\Users\Korisnik\Desktop\PubSubSystem\Subscriber\Subscriber.cpp(60,67): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-  Subscriber.vcxproj -> C:\Users\Korisnik\Desktop\PubSubSystem\x64\Debug\Subscriber.exe
