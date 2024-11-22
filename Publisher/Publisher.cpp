@@ -21,44 +21,23 @@ bool InitializeWindowsSockets() {
     return true;
 }
 
-void PrintTopicsMenu(const char** topics, int topicCount) {
-    printf("\nAvailable topics to subscribe:\n");
-    for (int i = 0; i < topicCount; i++) {
-        printf("%d. %s\n", i + 1, topics[i]);
-    }
-    printf("%d. Exit\n", topicCount + 1);
+
+// Generisanje random lokacije, topic-a, poruke i expiration time
+void GenerateRandomMessage(PublisherMessage* message, const char** topics, int topicCount) {
+    // Generate a random location (0-999)
+    message->location = rand() % 1000;
+
+    // Pick a random topic
+    strcpy_s(message->topic, topics[rand() % topicCount]);
+
+    // Generate a random message value
+    message->message = rand() % 1000;
+
+    // Generate a random expiration time (10-60 seconds)
+    message->expirationTime = (rand() % 51) + 10;
 }
 
-void ChooseMessage(PublisherMessage *message, const char** topics, int topicCount)
-{
-    int location, expirationTime;
-    int topicChoice, msg;
-    printf("*****Publish info*****\n");
-    
-    printf("Location: ");
-    scanf_s("%d", &location);
-    
-    do {
-        PrintTopicsMenu(topics, topicCount);
-        printf("\nEnter your topic choice: ");
-        scanf_s("%d", &topicChoice);
-        if (topicChoice < 1 || topicChoice > topicCount) {
-            printf("Invalid choice, please try again.\n");
-        }
-    } while (topicChoice < 1 || topicChoice > topicCount);
-
-    printf("Message: ");
-    scanf_s("%d", &msg);
-    
-    printf("Exspiration time: ");
-    scanf_s("%d", &expirationTime);
-
-    strcpy_s(message->topic, topics[topicChoice-1]);
-    message->location = location;
-    message->expirationTime = expirationTime;
-    message->message = msg;
-}
-
+//Main funkcija
 int main()
 {
     if (!InitializeWindowsSockets())
@@ -96,11 +75,33 @@ int main()
 
     const char* topics[3] = { "Power", "Voltage", "Strength" };
 
-    PublisherMessage msg;
-    ChooseMessage(&msg, topics, 3);
-    
-    send(connectSocket, msg.topic, strlen(msg.topic),0);
 
-    printf("%d, %s, %d, %d", msg.location, msg.topic, msg.message, msg.expirationTime);
+    //For petlja koja trenutno salje 500 poruka sa sleepom od 2 sekunde
+    for (int i = 0; i < 500; i++) {
+        PublisherMessage msg;
+        GenerateRandomMessage(&msg, topics, 3);
+
+        // Send the message to the server
+        int bytesSent = send(connectSocket, (char*)&msg, sizeof(PublisherMessage), 0);
+        if (bytesSent == SOCKET_ERROR) {
+            printf("Failed to send message %d to server.\n", i + 1);
+        }
+        else {
+            printf("Message %d sent: Location=%d, Topic=%s, Value=%d, Expiration=%d\n",
+                i + 1, msg.location, msg.topic, msg.message, msg.expirationTime);
+        }
+
+        // Sleep for 2 seconds before sending the next message
+        Sleep(2000);
+    }
+
+    printf("All messages sent. Press any key to close.\n");
     _getch();
+
+    // Cleanup
+    closesocket(connectSocket);
+    WSACleanup();
+
+    return 0;
 }
+

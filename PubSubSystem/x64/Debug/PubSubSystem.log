@@ -1,3 +1,8 @@
 ﻿  PubSubSystem.cpp
-  LINK : C:\Users\bukva\source\repos\TheGrca\PubSubSystem\x64\Debug\PubSubService.exe not found or not built by the last incremental link; performing full link
-  PubSubSystem.vcxproj -> C:\Users\bukva\source\repos\TheGrca\PubSubSystem\x64\Debug\PubSubService.exe
+C:\Users\Korisnik\Desktop\PubSubSystem\PubSubSystem\PubSubSystem.cpp(40,55): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Korisnik\Desktop\PubSubSystem\PubSubSystem\PubSubSystem.cpp(138,97): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Korisnik\Desktop\PubSubSystem\PubSubSystem\PubSubSystem.cpp(173,97): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Korisnik\Desktop\PubSubSystem\PubSubSystem\PubSubSystem.cpp(179,36): warning C4477: 'printf' : format string '%d' requires an argument of type 'int', but variadic argument 1 has type 'char *'
+C:\Users\Korisnik\Desktop\PubSubSystem\PubSubSystem\PubSubSystem.cpp(179,36): warning C4313: 'printf': '%d' in format string conflicts with argument 1 of type 'char *'
+C:\Users\Korisnik\Desktop\PubSubSystem\PubSubSystem\PubSubSystem.cpp(274,10): warning C4101: 'formattedMessage': unreferenced local variable
+  PubSubSystem.vcxproj -> C:\Users\Korisnik\Desktop\PubSubSystem\x64\Debug\PubSubService.exe

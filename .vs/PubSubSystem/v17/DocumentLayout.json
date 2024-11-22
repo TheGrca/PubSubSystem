@@ -1,32 +1,42 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\bukva\\source\\repos\\TheGrca\\PubSubSystem\\",
+  "WorkspaceRootPath": "C:\\Users\\Korisnik\\Desktop\\PubSubSystem\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{5E1238FE-B107-4A9E-BE58-0B51E3C27B3A}|Publisher\\Publisher.vcxproj|C:\\Users\\bukva\\source\\repos\\TheGrca\\PubSubSystem\\Publisher\\Publisher.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "AbsoluteMoniker": "D:0:0:{E7D7E6FE-A60F-451A-989C-8591291178E8}|PubSubSystem\\PubSubSystem.vcxproj|C:\\Users\\Korisnik\\Desktop\\PubSubSystem\\PubSubSystem\\PubSubSystem.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{E7D7E6FE-A60F-451A-989C-8591291178E8}|PubSubSystem\\PubSubSystem.vcxproj|solutionrelative:PubSubSystem\\PubSubSystem.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D02E6163-BD73-4067-861A-10152C0B3493}|Subscriber\\Subscriber.vcxproj|C:\\Users\\Korisnik\\Desktop\\PubSubSystem\\Subscriber\\Subscriber.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{D02E6163-BD73-4067-861A-10152C0B3493}|Subscriber\\Subscriber.vcxproj|solutionrelative:Subscriber\\Subscriber.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E7D7E6FE-A60F-451A-989C-8591291178E8}|PubSubSystem\\PubSubSystem.vcxproj|C:\\Users\\Korisnik\\Desktop\\PubSubSystem\\PubSubSystem\\PubSubService.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{E7D7E6FE-A60F-451A-989C-8591291178E8}|PubSubSystem\\PubSubSystem.vcxproj|solutionrelative:PubSubSystem\\PubSubService.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.22000.0\\ucrt\\stdio.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D02E6163-BD73-4067-861A-10152C0B3493}|Subscriber\\Subscriber.vcxproj|C:\\Users\\Korisnik\\Desktop\\PubSubSystem\\Subscriber\\Subscriber.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{D02E6163-BD73-4067-861A-10152C0B3493}|Subscriber\\Subscriber.vcxproj|solutionrelative:Subscriber\\Subscriber.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5E1238FE-B107-4A9E-BE58-0B51E3C27B3A}|Publisher\\Publisher.vcxproj|C:\\Users\\Korisnik\\Desktop\\PubSubSystem\\Publisher\\Publisher.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{5E1238FE-B107-4A9E-BE58-0B51E3C27B3A}|Publisher\\Publisher.vcxproj|solutionrelative:Publisher\\Publisher.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{E7D7E6FE-A60F-451A-989C-8591291178E8}|PubSubSystem\\PubSubSystem.vcxproj|C:\\Users\\bukva\\source\\repos\\TheGrca\\PubSubSystem\\PubSubSystem\\PubSubSystem.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{E7D7E6FE-A60F-451A-989C-8591291178E8}|PubSubSystem\\PubSubSystem.vcxproj|solutionrelative:PubSubSystem\\PubSubSystem.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{5E1238FE-B107-4A9E-BE58-0B51E3C27B3A}|Publisher\\Publisher.vcxproj|C:\\Users\\Korisnik\\Desktop\\PubSubSystem\\Publisher\\Publisher.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{5E1238FE-B107-4A9E-BE58-0B51E3C27B3A}|Publisher\\Publisher.vcxproj|solutionrelative:Publisher\\Publisher.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|E:\\Windows Kits\\10\\Include\\10.0.22000.0\\ucrt\\stdio.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5E1238FE-B107-4A9E-BE58-0B51E3C27B3A}|Publisher\\Publisher.vcxproj|C:\\Users\\bukva\\source\\repos\\TheGrca\\PubSubSystem\\Publisher\\Publisher.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{5E1238FE-B107-4A9E-BE58-0B51E3C27B3A}|Publisher\\Publisher.vcxproj|solutionrelative:Publisher\\Publisher.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|E:\\Windows Kits\\10\\Include\\10.0.22000.0\\ucrt\\corecrt_stdio_config.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5E1238FE-B107-4A9E-BE58-0B51E3C27B3A}|Publisher\\Publisher.vcxproj|E:\\WINDOWS KITS\\10\\INCLUDE\\10.0.22000.0\\UCRT\\CORECRT_STDIO_CONFIG.H||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{D02E6163-BD73-4067-861A-10152C0B3493}|Subscriber\\Subscriber.vcxproj|C:\\Users\\bukva\\source\\repos\\TheGrca\\PubSubSystem\\Subscriber\\Subscriber.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{D02E6163-BD73-4067-861A-10152C0B3493}|Subscriber\\Subscriber.vcxproj|solutionrelative:Subscriber\\Subscriber.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{D02E6163-BD73-4067-861A-10152C0B3493}|Subscriber\\Subscriber.vcxproj|C:\\Users\\bukva\\source\\repos\\TheGrca\\PubSubSystem\\Subscriber\\Subscriber.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{D02E6163-BD73-4067-861A-10152C0B3493}|Subscriber\\Subscriber.vcxproj|solutionrelative:Subscriber\\Subscriber.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.22000.0\\um\\WinSock2.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
   "DocumentGroupContainers": [
@@ -36,103 +46,132 @@
       "DocumentGroups": [
         {
           "DockedWidth": 300,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 9,
           "Children": [
             {
               "$type": "Bookmark",
-              "Name": "ST:128:0:{75188d03-9892-4ae2-abf1-207126247ce5}"
+              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "corecrt_stdio_config.h",
-              "DocumentMoniker": "E:\\Windows Kits\\10\\Include\\10.0.22000.0\\ucrt\\corecrt_stdio_config.h",
-              "ToolTip": "E:\\Windows Kits\\10\\Include\\10.0.22000.0\\ucrt\\corecrt_stdio_config.h",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAAAAAAAAAAAA==",
+              "DocumentIndex": 3,
+              "Title": "stdio.h",
+              "DocumentMoniker": "C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.22000.0\\ucrt\\stdio.h",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.22000.0\\ucrt\\stdio.h",
+              "ToolTip": "C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.22000.0\\ucrt\\stdio.h",
+              "RelativeToolTip": "..\\..\\..\\..\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.22000.0\\ucrt\\stdio.h",
+              "ViewState": "AgIAAIsFAAAAAAAAAAAnwJ4FAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2024-11-21T13:11:37.432Z",
+              "WhenOpened": "2024-11-21T17:09:00.413Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "WinSock2.h",
+              "DocumentMoniker": "C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.22000.0\\um\\WinSock2.h",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.22000.0\\um\\WinSock2.h",
+              "ToolTip": "C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.22000.0\\um\\WinSock2.h",
+              "RelativeToolTip": "..\\..\\..\\..\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.22000.0\\um\\WinSock2.h",
+              "ViewState": "AgIAAIsIAAAAAAAAAAAtwJoIAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2024-11-21T16:42:58.444Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Subscriber.cpp",
+              "DocumentMoniker": "C:\\Users\\Korisnik\\Desktop\\PubSubSystem\\Subscriber\\Subscriber.cpp",
+              "RelativeDocumentMoniker": "Subscriber\\Subscriber.cpp",
+              "ToolTip": "C:\\Users\\Korisnik\\Desktop\\PubSubSystem\\Subscriber\\Subscriber.cpp",
+              "RelativeToolTip": "Subscriber\\Subscriber.cpp",
+              "ViewState": "AgIAACgAAAAAAAAAAAAYwEUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-11-21T16:27:31.349Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
+              "Title": "PubSubService.h",
+              "DocumentMoniker": "C:\\Users\\Korisnik\\Desktop\\PubSubSystem\\PubSubSystem\\PubSubService.h",
+              "RelativeDocumentMoniker": "PubSubSystem\\PubSubService.h",
+              "ToolTip": "C:\\Users\\Korisnik\\Desktop\\PubSubSystem\\PubSubSystem\\PubSubService.h",
+              "RelativeToolTip": "PubSubSystem\\PubSubService.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2024-11-21T16:17:29.157Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Subscriber.h",
+              "DocumentMoniker": "C:\\Users\\Korisnik\\Desktop\\PubSubSystem\\Subscriber\\Subscriber.h",
+              "RelativeDocumentMoniker": "Subscriber\\Subscriber.h",
+              "ToolTip": "C:\\Users\\Korisnik\\Desktop\\PubSubSystem\\Subscriber\\Subscriber.h",
+              "RelativeToolTip": "Subscriber\\Subscriber.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2024-11-21T16:15:31.918Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "corecrt_stdio_config.h",
+              "DocumentMoniker": "E:\\Windows Kits\\10\\Include\\10.0.22000.0\\ucrt\\corecrt_stdio_config.h",
+              "ToolTip": "E:\\Windows Kits\\10\\Include\\10.0.22000.0\\ucrt\\corecrt_stdio_config.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2024-11-21T13:11:37.432Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
               "Title": "stdio.h",
               "DocumentMoniker": "E:\\Windows Kits\\10\\Include\\10.0.22000.0\\ucrt\\stdio.h",
               "ToolTip": "E:\\Windows Kits\\10\\Include\\10.0.22000.0\\ucrt\\stdio.h",
               "ViewState": "AgIAADgEAAAAAAAAAAAvwEoEAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2024-11-21T12:52:24.382Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-21T12:52:24.382Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 6,
               "Title": "Publisher.h",
-              "DocumentMoniker": "C:\\Users\\bukva\\source\\repos\\TheGrca\\PubSubSystem\\Publisher\\Publisher.h",
+              "DocumentMoniker": "C:\\Users\\Korisnik\\Desktop\\PubSubSystem\\Publisher\\Publisher.h",
               "RelativeDocumentMoniker": "Publisher\\Publisher.h",
-              "ToolTip": "C:\\Users\\bukva\\source\\repos\\TheGrca\\PubSubSystem\\Publisher\\Publisher.h",
+              "ToolTip": "C:\\Users\\Korisnik\\Desktop\\PubSubSystem\\Publisher\\Publisher.h",
               "RelativeToolTip": "Publisher\\Publisher.h",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAVAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2024-11-21T12:19:43.224Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-21T12:19:43.224Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "PubSubSystem.cpp",
-              "DocumentMoniker": "C:\\Users\\bukva\\source\\repos\\TheGrca\\PubSubSystem\\PubSubSystem\\PubSubSystem.cpp",
+              "DocumentMoniker": "C:\\Users\\Korisnik\\Desktop\\PubSubSystem\\PubSubSystem\\PubSubSystem.cpp",
               "RelativeDocumentMoniker": "PubSubSystem\\PubSubSystem.cpp",
-              "ToolTip": "C:\\Users\\bukva\\source\\repos\\TheGrca\\PubSubSystem\\PubSubSystem\\PubSubSystem.cpp",
+              "ToolTip": "C:\\Users\\Korisnik\\Desktop\\PubSubSystem\\PubSubSystem\\PubSubSystem.cpp",
               "RelativeToolTip": "PubSubSystem\\PubSubSystem.cpp",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAADEAAABGAAAAAAAAAA==",
+              "ViewState": "AgIAAIoAAAAAAAAAAAArwLIAAABLAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2024-11-20T16:27:08.843Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 5,
               "Title": "Publisher.cpp",
-              "DocumentMoniker": "C:\\Users\\bukva\\source\\repos\\TheGrca\\PubSubSystem\\Publisher\\Publisher.cpp",
+              "DocumentMoniker": "C:\\Users\\Korisnik\\Desktop\\PubSubSystem\\Publisher\\Publisher.cpp",
               "RelativeDocumentMoniker": "Publisher\\Publisher.cpp",
-              "ToolTip": "C:\\Users\\bukva\\source\\repos\\TheGrca\\PubSubSystem\\Publisher\\Publisher.cpp",
+              "ToolTip": "C:\\Users\\Korisnik\\Desktop\\PubSubSystem\\Publisher\\Publisher.cpp",
               "RelativeToolTip": "Publisher\\Publisher.cpp",
-              "ViewState": "AgIAAA4AAAAAAAAAAAAWwGUAAAAuAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACcAAAAPAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2024-11-20T16:28:04.61Z",
-              "EditorCaption": ""
-            }
-          ]
-        },
-        {
-          "DockedWidth": 300,
-          "SelectedChildIndex": 1,
-          "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "Subscriber.h",
-              "DocumentMoniker": "C:\\Users\\bukva\\source\\repos\\TheGrca\\PubSubSystem\\Subscriber\\Subscriber.h",
-              "RelativeDocumentMoniker": "Subscriber\\Subscriber.h",
-              "ToolTip": "C:\\Users\\bukva\\source\\repos\\TheGrca\\PubSubSystem\\Subscriber\\Subscriber.h",
-              "RelativeToolTip": "Subscriber\\Subscriber.h",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2024-11-20T17:11:26.766Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "Subscriber.cpp",
-              "DocumentMoniker": "C:\\Users\\bukva\\source\\repos\\TheGrca\\PubSubSystem\\Subscriber\\Subscriber.cpp",
-              "RelativeDocumentMoniker": "Subscriber\\Subscriber.cpp",
-              "ToolTip": "C:\\Users\\bukva\\source\\repos\\TheGrca\\PubSubSystem\\Subscriber\\Subscriber.cpp",
-              "RelativeToolTip": "Subscriber\\Subscriber.cpp",
-              "ViewState": "AgIAAB4AAAAAAAAAAAAAACMAAAAkAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2024-11-20T16:27:51.107Z",
               "EditorCaption": ""
             }
           ]
