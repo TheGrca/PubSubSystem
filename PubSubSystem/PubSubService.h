@@ -9,6 +9,9 @@
 
 #define DEFAULT_PORT "27016" 
 #define SUBSCRIBER_PORT "27017"
+#define BUFFER_SIZE 100
+#define SUBSCRIBER_BUFFER_SIZE 100
+
 // PublisherMessage structure
 struct PublisherMessage {
     int location;
@@ -17,52 +20,27 @@ struct PublisherMessage {
     int expirationTime;
 };
 
-// Circular buffer structure for PublisherMessage
-struct CircularBuffer {
-    PublisherMessage buffer[100]; // Fixed size buffer for simplicity
-    int head;                     // Points to the next position to write
-    int tail;                     // Points to the next position to read
-    int size;                     // Number of messages currently in the buffer
-    CRITICAL_SECTION cs;          // Critical section for thread safety
-};
-
-// Add a message to the circular buffer
-bool AddToCircularBuffer(CircularBuffer* cb, PublisherMessage* message) {
-    EnterCriticalSection(&cb->cs);
-
-    // Check if buffer is full
-    if (cb->size == 100) {
-        LeaveCriticalSection(&cb->cs);
-        return false; // Buffer full
-    }
-
-    cb->buffer[cb->head] = *message;
-    cb->head = (cb->head + 1) % 100;
-    cb->size++;
-
-    LeaveCriticalSection(&cb->cs);
-    return true;
-}
-
-// Get a message from the circular buffer
-bool GetFromCircularBuffer(CircularBuffer* cb, PublisherMessage* message) {
-    EnterCriticalSection(&cb->cs);
-
-    // Check if buffer is empty
-    if (cb->size == 0) {
-        LeaveCriticalSection(&cb->cs);
-        return false; // Buffer empty
-    }
-
-    *message = cb->buffer[cb->tail];
-    cb->tail = (cb->tail + 1) % 100;
-    cb->size--;
-
-    LeaveCriticalSection(&cb->cs);
-    return true;
-}
 
 
+typedef struct {
+    PublisherMessage buffer[BUFFER_SIZE];
+    int head; // Write position
+    int tail; // Read position
+    int size; // Number of messages in buffer
+    CRITICAL_SECTION cs;
+} CircularBuffer;
+
+typedef struct {
+    PublisherMessage* heap[BUFFER_SIZE];
+    int size;
+    CRITICAL_SECTION cs;
+} ProcessedHeap;
+
+void InitializeCircularBuffer(CircularBuffer* cb);
+bool AddToCircularBuffer(CircularBuffer* cb, PublisherMessage* message);
+bool GetFromCircularBuffer(CircularBuffer* cb, PublisherMessage* message);
+bool AddToHeap(ProcessedHeap* heap, PublisherMessage* message);
+void RemoveExpiredFromHeap(ProcessedHeap* heap);
 
 //SUBSCRIBER
 
@@ -76,5 +54,14 @@ struct SubscriberData {
     SubscribedTo subscription;
 };
 
-std::vector<SubscriberData> subscribers;
-std::mutex subscribersMutex;
+typedef struct HashmapEntry {
+    SubscriberData* subscribers[10];
+    int subscriberCount;
+} HashmapEntry;
+
+HashmapEntry locationSubscribers[1000];  // Keys 0-999
+HashmapEntry topicSubscribers[3];        // Keys "Power", "Voltage", "Strength"
+
+void InitializeHashmaps();
+void AddSubscriberToLocation(int location, SubscriberData* subscriber);
+void AddSubscriberToTopic(const char* topic, SubscriberData* subscriber);

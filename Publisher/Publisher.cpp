@@ -22,7 +22,7 @@ bool InitializeWindowsSockets() {
 }
 
 
-// Generate a random PublisherMessage
+// Generisanje random lokacije, topic-a, poruke i expiration time
 void GenerateRandomMessage(PublisherMessage* message, const char** topics, int topicCount) {
     // Generate a random location (0-999)
     message->location = rand() % 1000;
@@ -37,44 +37,7 @@ void GenerateRandomMessage(PublisherMessage* message, const char** topics, int t
     message->expirationTime = (rand() % 51) + 10;
 }
 
-void PrintTopicsMenu(const char** topics, int topicCount) {
-    printf("\nAvailable topics to subscribe:\n");
-    for (int i = 0; i < topicCount; i++) {
-        printf("%d. %s\n", i + 1, topics[i]);
-    }
-    printf("%d. Exit\n", topicCount + 1);
-}
-
-void ChooseMessage(PublisherMessage *message, const char** topics, int topicCount)
-{
-    int location, expirationTime;
-    int topicChoice, msg;
-    printf("*****Publish info*****\n");
-    
-    printf("Location: ");
-    scanf_s("%d", &location);
-    
-    do {
-        PrintTopicsMenu(topics, topicCount);
-        printf("\nEnter your topic choice: ");
-        scanf_s("%d", &topicChoice);
-        if (topicChoice < 1 || topicChoice > topicCount) {
-            printf("Invalid choice, please try again.\n");
-        }
-    } while (topicChoice < 1 || topicChoice > topicCount);
-
-    printf("Message: ");
-    scanf_s("%d", &msg);
-    
-    printf("Exspiration time: ");
-    scanf_s("%d", &expirationTime);
-
-    strcpy_s(message->topic, topics[topicChoice-1]);
-    message->location = location;
-    message->expirationTime = expirationTime;
-    message->message = msg;
-}
-
+//Main funkcija
 int main()
 {
     if (!InitializeWindowsSockets())
@@ -112,6 +75,8 @@ int main()
 
     const char* topics[3] = { "Power", "Voltage", "Strength" };
 
+
+    //For petlja koja trenutno salje 500 poruka sa sleepom od 2 sekunde
     for (int i = 0; i < 500; i++) {
         PublisherMessage msg;
         GenerateRandomMessage(&msg, topics, 3);

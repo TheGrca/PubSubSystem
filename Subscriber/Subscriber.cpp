@@ -19,6 +19,7 @@ bool InitializeWindowsSockets() {
     return true;
 }
 
+//Print funkcija za meni
 void PrintTopicsMenu(const char** topics, int topicCount) {
     printf("\nAvailable topics to subscribe:\n");
     for (int i = 0; i < topicCount; i++) {
@@ -27,7 +28,7 @@ void PrintTopicsMenu(const char** topics, int topicCount) {
     printf("%d. Exit\n", topicCount + 1);
 }
 
-
+//Biranje teme i postavljanje lokacije
 void ChooseSubscription(SubscriberData* subscriber, const char** topics, int topicCount) {
     int topicChoice;
     do {
@@ -51,10 +52,11 @@ void ChooseSubscription(SubscriberData* subscriber, const char** topics, int top
         subscriber->subscription.location);
 }
 
+//Slanje socket-a i subskripcije serveru
 void SendSubscriptionToServer(SubscriberData* subscriber) {
     int bytesSent = send(subscriber->connectSocket,
-        (char*)&subscriber->subscription,
-        sizeof(SubscribedTo),
+        (char*)subscriber,
+        sizeof(SubscriberData), // Send the whole SubscriberData structure
         0);
     if (bytesSent == SOCKET_ERROR) {
         printf("Failed to send subscription to server.\n");
@@ -64,15 +66,16 @@ void SendSubscriptionToServer(SubscriberData* subscriber) {
     }
 }
 
+//Thread koji sluzi za primanje poruka od servera
 DWORD WINAPI ThreadReceiveMessages(LPVOID lpParam) {
     SubscriberData* subscriber = (SubscriberData*)lpParam;
-    char buffer[1024];
+    char buffer[100]; // Ensure this is large enough for your formatted message
     int result;
-
+    printf("Waiting for messages...\n");
     while (1) {
         result = recv(subscriber->connectSocket, buffer, sizeof(buffer) - 1, 0);
         if (result > 0) {
-            buffer[result] = '\0';
+            buffer[result] = '\0'; // Null-terminate the string
             printf("\n[Server]: %s\n", buffer);
         }
         else if (result == 0) {
@@ -88,6 +91,7 @@ DWORD WINAPI ThreadReceiveMessages(LPVOID lpParam) {
     return 0;
 }
 
+//Pokretanje Main funkcije
 int main() {
     if (!InitializeWindowsSockets()) {
         return 1;
@@ -138,13 +142,13 @@ int main() {
     DWORD threadId;
     threadHandle = CreateThread(NULL, 0, ThreadReceiveMessages, &subscriber, 0, &threadId);
     if (threadHandle == NULL) {
-        printf("Failed to create receive thread.\n");
+        printf("Failed to create receive thread. Error: %d\n", GetLastError());
         closesocket(connectSocket);
         WSACleanup();
         return 1;
     }
 
-    printf("Press ESC to exit.\n");
+
 
     // Wait for ESC to exit
     while (1) {
