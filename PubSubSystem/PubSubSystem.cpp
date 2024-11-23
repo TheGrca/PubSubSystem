@@ -7,6 +7,7 @@ HANDLE emptySemaphore;
 HANDLE fullSemaphore;
 
 
+//Inicijalizacija socketa
 bool InitializeWindowsSockets() {
     WSADATA wsaData;
     if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {
@@ -17,7 +18,7 @@ bool InitializeWindowsSockets() {
 }
 
 
-// Hendluje primanje poruke od subscribera
+// Hendluje primanje subskripcije i socketa od subscribera
 void HandleSubscriber(SOCKET clientSocket) {
     SubscriberData* subscriberData = (SubscriberData*)malloc(sizeof(SubscriberData));
     int bytesReceived;
@@ -78,6 +79,7 @@ void HandlePublisher(SOCKET clientSocket) {
 
     closesocket(clientSocket);
 }
+
 //Inicijalizacija kruznog buffera
 void InitializeCircularBuffer(CircularBuffer* cb) {
     cb->head = 0;
@@ -85,7 +87,6 @@ void InitializeCircularBuffer(CircularBuffer* cb) {
     cb->size = 0;
     InitializeCriticalSection(&cb->cs);
 }
-
 
 //Dodavanje poruke od publishera u buffer
 bool AddToCircularBuffer(CircularBuffer* cb, PublisherMessage* message) {
@@ -104,8 +105,9 @@ bool AddToCircularBuffer(CircularBuffer* cb, PublisherMessage* message) {
     return true;
 }
 
-//Thread za procesiranje poruke od publishera
+//Thread za procesiranje i slanje poruke subscriberu od publishera
 DWORD WINAPI ConsumerThread(LPVOID param) {
+    ProcessedHeap* heap = (ProcessedHeap*)param;
     while (true) {
         WaitForSingleObject(fullSemaphore, INFINITE);
 
@@ -195,22 +197,49 @@ DWORD WINAPI ConsumerThread(LPVOID param) {
     return 0;
 }
 
-bool GetFromCircularBuffer(CircularBuffer* cb, PublisherMessage* message) {
-    EnterCriticalSection(&cb->cs);
 
-    if (cb->size == 0) {
-        LeaveCriticalSection(&cb->cs);
-        return false; // Buffer empty
+//Inicijalizacija HashMapa za subscribere
+void InitializeHashmaps() {
+    memset(locationSubscribers, 0, sizeof(locationSubscribers));
+    memset(topicSubscribers, 0, sizeof(topicSubscribers));
+}
+//Dodavanje subscribera u hashmapu za lokacije
+void AddSubscriberToLocation(int location, SubscriberData* subscriber) {
+    HashmapEntry* entry = &locationSubscribers[location];
+    if (entry->subscriberCount < 10) {
+        entry->subscribers[entry->subscriberCount++] = subscriber;
     }
-
-    *message = cb->buffer[cb->tail];
-    cb->tail = (cb->tail + 1) % BUFFER_SIZE;
-    cb->size--;
-
-    LeaveCriticalSection(&cb->cs);
-    return true;
+}
+//Dodavanje subscribera u hashmapu za topic
+void AddSubscriberToTopic(const char* topic, SubscriberData* subscriber) {
+    int index = (strcmp(topic, "Power") == 0) ? 0 : (strcmp(topic, "Voltage") == 0) ? 1 : 2;
+    HashmapEntry* entry = &topicSubscribers[index];
+    if (entry->subscriberCount < 10) {
+        entry->subscribers[entry->subscriberCount++] = subscriber;
+    }
+}
+// Thread koji je stalno aktivan i trazi konekcije od subscribera
+DWORD WINAPI SubscriberListenerThread(LPVOID param) {
+    SOCKET subscriberListenSocket = *(SOCKET*)param;
+    while (true) {
+        SOCKET subscriberSocket = accept(subscriberListenSocket, NULL, NULL);
+        if (subscriberSocket != INVALID_SOCKET) {
+            std::cout << "Subscriber connected.\n";
+            std::thread subscriberThread(HandleSubscriber, subscriberSocket);
+            subscriberThread.detach();
+        }
+    }
+    return 0;
 }
 
+
+
+
+
+
+
+
+//IMPLEMENTIRATI:
 //Dodavanje poruke od publishera u heap
 bool AddToHeap(ProcessedHeap* heap, PublisherMessage* message) {
     EnterCriticalSection(&heap->cs);
@@ -242,57 +271,40 @@ void RemoveExpiredFromHeap(ProcessedHeap* heap) {
     LeaveCriticalSection(&heap->cs);
 }
 
-//Inicijalizacija HashMapa za subscribere
-void InitializeHashmaps() {
-    memset(locationSubscribers, 0, sizeof(locationSubscribers));
-    memset(topicSubscribers, 0, sizeof(topicSubscribers));
-}
-
-//Dodavanje subscribera u hashmapu za lokacije
-void AddSubscriberToLocation(int location, SubscriberData* subscriber) {
-    HashmapEntry* entry = &locationSubscribers[location];
-    if (entry->subscriberCount < 10) {
-        entry->subscribers[entry->subscriberCount++] = subscriber;
-    }
-}
-
-//Dodavanje subscribera u hashmapu za topic
-void AddSubscriberToTopic(const char* topic, SubscriberData* subscriber) {
-    int index = (strcmp(topic, "Power") == 0) ? 0 : (strcmp(topic, "Voltage") == 0) ? 1 : 2;
-    HashmapEntry* entry = &topicSubscribers[index];
-    if (entry->subscriberCount < 10) {
-        entry->subscribers[entry->subscriberCount++] = subscriber;
-    }
-}
-
 
 
 int main() {
     if (!InitializeWindowsSockets()) {
         return 1;
     }
-    char formattedMessage[100];
+    sockaddr_in publisherAddress;
+    publisherAddress.sin_family = AF_INET;
+    publisherAddress.sin_addr.s_addr = INADDR_ANY;
+    publisherAddress.sin_port = htons(atoi(DEFAULT_PORT));
+
+    sockaddr_in subscriberAddress;
+    subscriberAddress.sin_family = AF_INET;
+    subscriberAddress.sin_addr.s_addr = INADDR_ANY;
+    subscriberAddress.sin_port = htons(atoi(SUBSCRIBER_PORT));
 
     InitializeCircularBuffer(&cb);
     emptySemaphore = CreateSemaphore(NULL, BUFFER_SIZE, BUFFER_SIZE, NULL);
     fullSemaphore = CreateSemaphore(NULL, 0, BUFFER_SIZE, NULL);
 
+
+    //Kreiranje socketa
     SOCKET publisherListenSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     SOCKET subscriberListenSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 
+    //Pitamo za gresku kod socketa
     if (publisherListenSocket == INVALID_SOCKET || subscriberListenSocket == INVALID_SOCKET) {
         std::cerr << "Socket creation failed with error: " << WSAGetLastError() << std::endl;
         WSACleanup();
         return 1;
     }
 
-    sockaddr_in serverAddress;
-    serverAddress.sin_family = AF_INET;
-    serverAddress.sin_addr.s_addr = INADDR_ANY;
-
     // Bind publisher socket
-    serverAddress.sin_port = htons(atoi(DEFAULT_PORT));
-    if (bind(publisherListenSocket, (sockaddr*)&serverAddress, sizeof(serverAddress)) == SOCKET_ERROR) {
+    if (bind(publisherListenSocket, (sockaddr*)&publisherAddress, sizeof(publisherAddress)) == SOCKET_ERROR) {
         std::cerr << "Publisher bind failed with error: " << WSAGetLastError() << std::endl;
         closesocket(publisherListenSocket);
         WSACleanup();
@@ -300,14 +312,14 @@ int main() {
     }
 
     // Bind subscriber socket
-    serverAddress.sin_port = htons(atoi(SUBSCRIBER_PORT));
-    if (bind(subscriberListenSocket, (sockaddr*)&serverAddress, sizeof(serverAddress)) == SOCKET_ERROR) {
+    if (bind(subscriberListenSocket, (sockaddr*)&subscriberAddress, sizeof(subscriberAddress)) == SOCKET_ERROR) {
         std::cerr << "Subscriber bind failed with error: " << WSAGetLastError() << std::endl;
         closesocket(subscriberListenSocket);
         WSACleanup();
         return 1;
     }
 
+    //Listen kod publishera
     if (listen(publisherListenSocket, SOMAXCONN) == SOCKET_ERROR ||
         listen(subscriberListenSocket, SOMAXCONN) == SOCKET_ERROR) {
         std::cerr << "Listen failed with error: " << WSAGetLastError() << std::endl;
@@ -317,7 +329,18 @@ int main() {
         return 1;
     }
 
-    HANDLE consumerThread = CreateThread(NULL, 0, ConsumerThread, NULL, 0, NULL);
+    //Thread koji ce uvijek biti aktivan za slusanje kod subscribera
+    HANDLE subscriberListenerThread = CreateThread(NULL, 0, SubscriberListenerThread, &subscriberListenSocket, 0, NULL);
+    if (subscriberListenerThread == NULL) {
+        std::cerr << "Failed to create subscriber listener thread.\n";
+        closesocket(publisherListenSocket);
+        closesocket(subscriberListenSocket);
+        WSACleanup();
+        return 1;
+    }
+
+    //Aktiviranje thread-a koji salje poruke subscriberima
+    HANDLE consumerThread = CreateThread(NULL, 0, ConsumerThread, 0, 0, NULL);
     if (consumerThread == NULL) {
         std::cerr << "Failed to create consumer thread.\n";
         closesocket(publisherListenSocket);
@@ -325,40 +348,16 @@ int main() {
         WSACleanup();
         return 1;
     }
+
     std::cout << "Server is listening for publishers on port " << DEFAULT_PORT << "...\n";
     std::cout << "Server is listening for subscribers on port " << SUBSCRIBER_PORT << "...\n";
 
-    while (true) {
-        fd_set readSet;
-        FD_ZERO(&readSet);
-        FD_SET(publisherListenSocket, &readSet);
-        FD_SET(subscriberListenSocket, &readSet);
-
-        timeval timeout = { 1, 0 }; // 1-second timeout for select
-        int selectResult = select(0, &readSet, NULL, NULL, &timeout);
-
-        if (selectResult > 0) {
-            if (FD_ISSET(publisherListenSocket, &readSet)) {
-                // Accept a publisher connection
-                SOCKET publisherSocket = accept(publisherListenSocket, NULL, NULL);
-                if (publisherSocket != INVALID_SOCKET) {
-                    std::cout << "Publisher connected.\n";
-                    std::thread publisherThread(HandlePublisher, publisherSocket);
-                    publisherThread.detach();
-                }
-            }
-
-            if (FD_ISSET(subscriberListenSocket, &readSet)) {
-                // Accept a subscriber connection
-                SOCKET subscriberSocket = accept(subscriberListenSocket, NULL, NULL);
-                if (subscriberSocket != INVALID_SOCKET) {
-                    std::cout << "Subscriber connected.\n";
-                    std::thread subscriberThread(HandleSubscriber, subscriberSocket);
-                    subscriberThread.detach();
-                }
-            }
-        }
+    SOCKET publisherSocket = accept(publisherListenSocket, NULL, NULL);
+    if (publisherSocket != INVALID_SOCKET) {
+        std::cout << "Publisher connected.\n";
+        HandlePublisher(publisherSocket);
     }
+
     closesocket(publisherListenSocket);
     closesocket(subscriberListenSocket);
     DeleteCriticalSection(&cb.cs);
