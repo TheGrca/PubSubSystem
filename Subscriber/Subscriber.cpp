@@ -8,6 +8,7 @@
 #include <ws2tcpip.h>
 #include <iostream>
 
+CRITICAL_SECTION cs;
 
 // Initialize Winsock
 bool InitializeWindowsSockets() {
@@ -72,11 +73,14 @@ DWORD WINAPI ThreadReceiveMessages(LPVOID lpParam) {
     char buffer[100]; // Ensure this is large enough for your formatted message
     int result;
     printf("Waiting for messages...\n");
+    
     while (1) {
         result = recv(subscriber->connectSocket, buffer, sizeof(buffer) - 1, 0);
         if (result > 0) {
+            //EnterCriticalSection(&cs);
             buffer[result] = '\0'; // Null-terminate the string
             printf("\n[Server]: %s\n", buffer);
+            //LeaveCriticalSection(&cs);
         }
         else if (result == 0) {
             printf("Connection closed by server.\n");
@@ -96,6 +100,8 @@ int main() {
     if (!InitializeWindowsSockets()) {
         return 1;
     }
+
+    InitializeCriticalSection(&cs);
 
     const char* topics[3] = { "Power", "Voltage", "Strength" };
     SubscriberData subscriber;
@@ -161,6 +167,7 @@ int main() {
 
     // Clean up
     closesocket(connectSocket);
+    DeleteCriticalSection(&cs);
     WSACleanup();
     CloseHandle(threadHandle);
 

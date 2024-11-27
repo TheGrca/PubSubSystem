@@ -3,6 +3,7 @@
 
 
 CircularBuffer cb;
+ProcessedHeap pq;
 HANDLE emptySemaphore;
 HANDLE fullSemaphore;
 
@@ -39,6 +40,27 @@ void HandleSubscriber(SOCKET clientSocket) {
         // Send a confirmation back to the subscriber
         const char* confirmationMessage = "Subscription successful.";
         send(clientSocket, confirmationMessage, strlen(confirmationMessage), 0);
+        for (int i = 0; i < pq.size; i++)
+        {
+            printf("\nTopic u heapu: %s", pq.heap[i]->topic);
+            if (strcmp(subscriberData->subscription.topic, pq.heap[i]->topic) == 0)
+            {
+                char formattedMessage[100];
+                snprintf(formattedMessage, sizeof(formattedMessage),
+                    "Location: %d, Topic: %s, Message: %d",
+                    pq.heap[i]->location, pq.heap[i]->topic, pq.heap[i]->message);
+
+                EnterCriticalSection(&cb.cs);
+                // Now send the formatted message
+                int bytesSent = send(subscriberData->connectSocket, formattedMessage, strlen(formattedMessage), 0);
+                LeaveCriticalSection(&cb.cs);
+                if (bytesSent == SOCKET_ERROR) {
+                    printf("Failed to send message to subscriber at location: %d, Error: %d\n",
+                        pq.heap[i]->location, WSAGetLastError());
+                }
+                
+            }
+        }
     }
     else {
         printf("Failed to receive subscriber data. Expected size: %zu, Received size: %d\n",
@@ -117,6 +139,8 @@ DWORD WINAPI ConsumerThread(LPVOID param) {
         if (cb.size > 0) {
             // Retrieve the message from the circular buffer
             PublisherMessage message = cb.buffer[cb.tail];
+            message.expirationTime = ParseTime(message.expirationTime);
+            AddToHeap(&pq, &message);
             cb.tail = (cb.tail + 1) % BUFFER_SIZE;
             cb.size--;
             LeaveCriticalSection(&cb.cs);
@@ -190,7 +214,6 @@ DWORD WINAPI ConsumerThread(LPVOID param) {
         else {
             LeaveCriticalSection(&cb.cs);
         }
-
         Sleep(100); // Prevent tight looping
     }
 
@@ -232,17 +255,35 @@ DWORD WINAPI SubscriberListenerThread(LPVOID param) {
     return 0;
 }
 
+bool GetFromCircularBuffer(CircularBuffer* cb, PublisherMessage* message) {
+    EnterCriticalSection(&cb->cs);
 
+    if (cb->size == 0) {
+        LeaveCriticalSection(&cb->cs);
+        return false; // Buffer empty
+    }
 
+    *message = cb->buffer[cb->tail];
+    AddToHeap(&pq, message);
+    cb->tail = (cb->tail + 1) % BUFFER_SIZE;
+    cb->size--;
 
+    LeaveCriticalSection(&cb->cs);
+    return true;
+}
 
-
-
-
-//IMPLEMENTIRATI:
+void InitializeHeap(ProcessedHeap* pq)
+{
+    for (int i = 0; i < BUFFER_SIZE; i++)
+    {
+        pq->heap[i] = NULL;
+    }
+    pq->size = 0;
+    InitializeCriticalSection(&pq->cs);
+}
 //Dodavanje poruke od publishera u heap
 bool AddToHeap(ProcessedHeap* heap, PublisherMessage* message) {
-    EnterCriticalSection(&heap->cs);
+    //EnterCriticalSection(&heap->cs);
 
     if (heap->size == BUFFER_SIZE) {
         LeaveCriticalSection(&heap->cs);
@@ -250,8 +291,10 @@ bool AddToHeap(ProcessedHeap* heap, PublisherMessage* message) {
     }
 
     heap->heap[heap->size++] = message;
+    HeapifyUp(heap, heap->size - 1);
+    printf("Dodat %d u heap %s\n", message->location, message->topic);
 
-    LeaveCriticalSection(&heap->cs);
+    //LeaveCriticalSection(&heap->cs);
     return true;
 }
 
@@ -259,19 +302,80 @@ bool AddToHeap(ProcessedHeap* heap, PublisherMessage* message) {
 void RemoveExpiredFromHeap(ProcessedHeap* heap) {
     EnterCriticalSection(&heap->cs);
 
-    time_t currentTime = time(NULL);
-
-    for (int i = 0; i < heap->size; i++) {
-        if (heap->heap[i]->expirationTime < currentTime) {
-            heap->heap[i] = heap->heap[--heap->size];
-            i--; // Check new entry at this index
-        }
-    }
+    RemoveFromHeap(heap);
 
     LeaveCriticalSection(&heap->cs);
 }
 
+PublisherMessage RemoveFromHeap(ProcessedHeap* pq)
+{
+    PublisherMessage ERROR_MESSAGE = { -1, "", -1, NULL };
+    if (!pq->size) {
+        printf("Priority queue is empty\n");
+        return ERROR_MESSAGE;
+    }
 
+    PublisherMessage item = *pq->heap[0];
+    pq->heap[0] = pq->heap[--pq->size];
+    HeapifyDown(pq, 0);
+    return item;
+}
+
+PublisherMessage peek(ProcessedHeap* pq)
+{
+    PublisherMessage ERROR_MESSAGE = { -1, "", -1, NULL };
+    if (!pq->size) {
+        printf("Priority queue is empty\n");
+        return ERROR_MESSAGE;
+    }
+    return *pq->heap[0];
+}
+
+//Menjanje dva elementa u heap-u
+void Swap(PublisherMessage* a, PublisherMessage* b)
+{
+    PublisherMessage temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+//Odrzavanje heap property-ja pri dodavanju
+void HeapifyUp(ProcessedHeap* pq, int index)
+{
+    if (index
+        && pq->heap[(index - 1) / 2]->expirationTime > pq->heap[index]->expirationTime) {
+        Swap(pq->heap[(index - 1) / 2],
+            pq->heap[index]);
+        HeapifyUp(pq, (index - 1) / 2);
+    }
+}
+
+//Odrzavanje heap property-ja pri dodavanju pri brisanju
+void HeapifyDown(ProcessedHeap* pq, int index)
+{
+    int smallest = index;
+    int left = 2 * index + 1;
+    int right = 2 * index + 2;
+
+    if (left < pq->size
+        && pq->heap[left] < pq->heap[smallest])
+        smallest = left;
+
+    if (right < pq->size
+        && pq->heap[right] < pq->heap[smallest])
+        smallest = right;
+
+    if (smallest != index) {
+        Swap(pq->heap[index], pq->heap[smallest]);
+        HeapifyDown(pq, smallest);
+    }
+}
+
+time_t ParseTime(int seconds)
+{
+    time_t now = time(0);
+    return now + seconds;
+}
 
 int main() {
     if (!InitializeWindowsSockets()) {
@@ -287,6 +391,7 @@ int main() {
     subscriberAddress.sin_addr.s_addr = INADDR_ANY;
     subscriberAddress.sin_port = htons(atoi(SUBSCRIBER_PORT));
 
+    InitializeHeap(&pq);
     InitializeCircularBuffer(&cb);
     emptySemaphore = CreateSemaphore(NULL, BUFFER_SIZE, BUFFER_SIZE, NULL);
     fullSemaphore = CreateSemaphore(NULL, 0, BUFFER_SIZE, NULL);

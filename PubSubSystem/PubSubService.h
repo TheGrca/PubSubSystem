@@ -38,8 +38,6 @@ typedef struct {
 
 void InitializeCircularBuffer(CircularBuffer* cb);
 bool AddToCircularBuffer(CircularBuffer* cb, PublisherMessage* message);
-bool AddToHeap(ProcessedHeap* heap, PublisherMessage* message);
-void RemoveExpiredFromHeap(ProcessedHeap* heap);
 
 //SUBSCRIBER
 
@@ -64,3 +62,13 @@ HashmapEntry topicSubscribers[3];        // Keys "Power", "Voltage", "Strength"
 void InitializeHashmaps();
 void AddSubscriberToLocation(int location, SubscriberData* subscriber);
 void AddSubscriberToTopic(const char* topic, SubscriberData* subscriber);
+bool GetFromCircularBuffer(CircularBuffer* cb, PublisherMessage* message);
+void InitializeHeap(ProcessedHeap* pq);
+bool AddToHeap(ProcessedHeap* heap, PublisherMessage* message);
+void RemoveExpiredFromHeap(ProcessedHeap* heap);
+PublisherMessage RemoveFromHeap(ProcessedHeap* pq);
+PublisherMessage peek(ProcessedHeap* pq);
+void Swap(PublisherMessage* a, PublisherMessage* b);
+void HeapifyUp(ProcessedHeap* pq, int index);
+void HeapifyDown(ProcessedHeap* pq, int index);
+time_t ParseTime(int seconds);
