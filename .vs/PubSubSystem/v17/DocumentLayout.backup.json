@@ -7,12 +7,12 @@
       "RelativeMoniker": "D:0:0:{E7D7E6FE-A60F-451A-989C-8591291178E8}|PubSubSystem\\PubSubSystem.vcxproj|solutionrelative:PubSubSystem\\PubSubSystem.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{D02E6163-BD73-4067-861A-10152C0B3493}|Subscriber\\Subscriber.vcxproj|C:\\Users\\Korisnik\\Desktop\\PubSubSystem\\Subscriber\\Subscriber.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{D02E6163-BD73-4067-861A-10152C0B3493}|Subscriber\\Subscriber.vcxproj|solutionrelative:Subscriber\\Subscriber.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{E7D7E6FE-A60F-451A-989C-8591291178E8}|PubSubSystem\\PubSubSystem.vcxproj|C:\\Users\\Korisnik\\Desktop\\PubSubSystem\\PubSubSystem\\PubSubService.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{E7D7E6FE-A60F-451A-989C-8591291178E8}|PubSubSystem\\PubSubSystem.vcxproj|solutionrelative:PubSubSystem\\PubSubService.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D02E6163-BD73-4067-861A-10152C0B3493}|Subscriber\\Subscriber.vcxproj|C:\\Users\\Korisnik\\Desktop\\PubSubSystem\\Subscriber\\Subscriber.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{D02E6163-BD73-4067-861A-10152C0B3493}|Subscriber\\Subscriber.vcxproj|solutionrelative:Subscriber\\Subscriber.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.22000.0\\ucrt\\stdio.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
@@ -58,8 +58,7 @@
               "RelativeToolTip": "..\\..\\..\\..\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.22000.0\\ucrt\\stdio.h",
               "ViewState": "AgIAAIsFAAAAAAAAAAAnwJ4FAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2024-11-21T17:09:00.413Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-21T17:09:00.413Z"
             },
             {
               "$type": "Document",
@@ -75,26 +74,26 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "Subscriber.cpp",
               "DocumentMoniker": "C:\\Users\\Korisnik\\Desktop\\PubSubSystem\\Subscriber\\Subscriber.cpp",
               "RelativeDocumentMoniker": "Subscriber\\Subscriber.cpp",
               "ToolTip": "C:\\Users\\Korisnik\\Desktop\\PubSubSystem\\Subscriber\\Subscriber.cpp",
               "RelativeToolTip": "Subscriber\\Subscriber.cpp",
-              "ViewState": "AgIAACgAAAAAAAAAAAAYwEUAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAHIAAAAAAAAAAAAiwKcAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2024-11-21T16:27:31.349Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
               "Title": "PubSubService.h",
               "DocumentMoniker": "C:\\Users\\Korisnik\\Desktop\\PubSubSystem\\PubSubSystem\\PubSubService.h",
               "RelativeDocumentMoniker": "PubSubSystem\\PubSubService.h",
               "ToolTip": "C:\\Users\\Korisnik\\Desktop\\PubSubSystem\\PubSubSystem\\PubSubService.h",
               "RelativeToolTip": "PubSubSystem\\PubSubService.h",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAeAAAAAAAAAA==",
+              "ViewState": "AgIAAA0AAAAAAAAAAAASwCcAAABIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
               "WhenOpened": "2024-11-21T16:17:29.157Z",
               "EditorCaption": ""
@@ -109,8 +108,7 @@
               "RelativeToolTip": "Subscriber\\Subscriber.h",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2024-11-21T16:15:31.918Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-21T16:15:31.918Z"
             },
             {
               "$type": "Document",
@@ -152,7 +150,7 @@
               "RelativeDocumentMoniker": "PubSubSystem\\PubSubSystem.cpp",
               "ToolTip": "C:\\Users\\Korisnik\\Desktop\\PubSubSystem\\PubSubSystem\\PubSubSystem.cpp",
               "RelativeToolTip": "PubSubSystem\\PubSubSystem.cpp",
-              "ViewState": "AgIAAHsAAAAAAAAAAAArwIQAAABLAAAAAAAAAA==",
+              "ViewState": "AgIAACcBAAAAAAAAAAAAAFYBAABDAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2024-11-20T16:27:08.843Z",
               "EditorCaption": ""
@@ -167,8 +165,7 @@
               "RelativeToolTip": "Publisher\\Publisher.cpp",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAACcAAAAPAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2024-11-20T16:28:04.61Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-20T16:28:04.61Z"
             }
           ]
         }

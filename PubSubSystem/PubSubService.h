@@ -38,7 +38,6 @@ typedef struct {
 
 void InitializeCircularBuffer(CircularBuffer* cb);
 bool AddToCircularBuffer(CircularBuffer* cb, PublisherMessage* message);
-bool GetFromCircularBuffer(CircularBuffer* cb, PublisherMessage* message);
 bool AddToHeap(ProcessedHeap* heap, PublisherMessage* message);
 void RemoveExpiredFromHeap(ProcessedHeap* heap);
 
