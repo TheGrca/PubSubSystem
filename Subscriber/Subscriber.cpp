@@ -46,7 +46,7 @@ void ChooseSubscription(SubscriberData* subscriber, const char** topics, int top
 
     // Set a random location (0-999)
     //TO DO: Make a location function
-    subscriber->subscription.location = rand() % 1000;
+    subscriber->subscription.location = rand() % 100;
 
     printf("\nSubscribed to Topic: %s, Location: %d\n",
         subscriber->subscription.topic,
@@ -118,7 +118,7 @@ int main() {
 
     sockaddr_in serverAddress;
     serverAddress.sin_family = AF_INET;
-    serverAddress.sin_port = htons(27017);
+    serverAddress.sin_port = htons(27020);
 
     if (InetPton(AF_INET, L"127.0.0.1", &serverAddress.sin_addr) <= 0) {
         printf("Invalid address.\n");

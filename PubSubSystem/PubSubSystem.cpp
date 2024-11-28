@@ -58,6 +58,9 @@ void HandleSubscriber(SOCKET clientSocket) {
                     printf("Failed to send message to subscriber at location: %d, Error: %d\n",
                         pq.heap[i]->location, WSAGetLastError());
                 }
+                else {
+                    printf("Sent message to subscriber: %s", formattedMessage);
+                }
                 
             }
         }
@@ -214,7 +217,7 @@ DWORD WINAPI ConsumerThread(LPVOID param) {
         else {
             LeaveCriticalSection(&cb.cs);
         }
-        Sleep(100); // Prevent tight looping
+       // Sleep(100); // Prevent tight looping
     }
 
     return 0;
@@ -289,11 +292,33 @@ bool AddToHeap(ProcessedHeap* heap, PublisherMessage* message) {
         LeaveCriticalSection(&heap->cs);
         return false; // Heap full
     }
+    PublisherMessage* newMessage = (PublisherMessage*)malloc(sizeof(PublisherMessage));
+    if (!newMessage) {
+        printf("Memory allocation failed for new heap element.\n");
+        return false;
+    }
+    *newMessage = *message;
 
-    heap->heap[heap->size++] = message;
-    HeapifyUp(heap, heap->size - 1);
-    printf("Dodat %d u heap %s\n", message->location, message->topic);
+    // Add to the end of the heap
+    heap->heap[heap->size] = newMessage;
+    int currentIndex = heap->size;
+    heap->size++;
 
+    // Bubble-up to maintain heap order (min-heap or max-heap)
+    while (currentIndex > 0) {
+        int parentIndex = (currentIndex - 1) / 2;
+        if (heap->heap[parentIndex]->location > heap->heap[currentIndex]->location) {
+            // Swap with parent
+            PublisherMessage* temp = heap->heap[parentIndex];
+            heap->heap[parentIndex] = heap->heap[currentIndex];
+            heap->heap[currentIndex] = temp;
+            currentIndex = parentIndex;
+        }
+        else {
+            break; // Heap property satisfied
+        }
+    }
+    printf("Dodat %d u heap %s\n", newMessage->location, newMessage->topic);
     //LeaveCriticalSection(&heap->cs);
     return true;
 }
@@ -302,9 +327,23 @@ bool AddToHeap(ProcessedHeap* heap, PublisherMessage* message) {
 void RemoveExpiredFromHeap(ProcessedHeap* heap) {
     EnterCriticalSection(&heap->cs);
 
-    RemoveFromHeap(heap);
+    if (heap->size > 0) {
+        time_t currentTime = time(0);
+        if (currentTime >= peek(heap).expirationTime) {
+            PublisherMessage removedMessage = RemoveFromHeap(heap);
+            printf("Message removed: Location: %d, Topic: %s\n",
+                removedMessage.location, removedMessage.topic);
+        }
+    }
 
     LeaveCriticalSection(&heap->cs);
+}
+
+void FreeHeap(ProcessedHeap* heap) {
+    for (int i = 0; i < heap->size; i++) {
+        free(heap->heap[i]); // Free each allocated message
+    }
+    heap->size = 0; // Reset the heap size
 }
 
 PublisherMessage RemoveFromHeap(ProcessedHeap* pq)
@@ -377,6 +416,32 @@ time_t ParseTime(int seconds)
     return now + seconds;
 }
 
+
+DWORD WINAPI MonitorHeapThread(LPVOID param) {
+    ProcessedHeap* heap = (ProcessedHeap*)param;
+
+    while (1) {
+        Sleep(250); // Sleep for 0.2 seconds
+
+        EnterCriticalSection(&heap->cs);
+
+        if (heap->size > 0) {
+            time_t currentTime = time(0);
+            PublisherMessage topMessage = peek(heap);
+
+            if (currentTime >= topMessage.expirationTime) {
+                PublisherMessage removedMessage = RemoveFromHeap(heap);
+                printf("Message removed: Location: %d, Topic: %s\n",
+                    removedMessage.location, removedMessage.topic);
+            }
+        }
+
+        LeaveCriticalSection(&heap->cs);
+    }
+    return 0;
+}
+
+
 int main() {
     if (!InitializeWindowsSockets()) {
         return 1;
@@ -395,6 +460,16 @@ int main() {
     InitializeCircularBuffer(&cb);
     emptySemaphore = CreateSemaphore(NULL, BUFFER_SIZE, BUFFER_SIZE, NULL);
     fullSemaphore = CreateSemaphore(NULL, 0, BUFFER_SIZE, NULL);
+    //Aktiviranje thread-a koji salje poruke subscriberima
+    HANDLE consumerThreads[THREAD_POOL];
+    for (int i = 0; i < THREAD_POOL; i++) {
+        consumerThreads[i] = CreateThread(NULL, 0, ConsumerThread, &pq, 0, NULL);
+        if (consumerThreads[i] == NULL) {
+            std::cerr << "Failed to create consumer thread.\n";
+            WSACleanup();
+            return 1;
+        }
+    }
 
 
     //Kreiranje socketa
@@ -444,23 +519,30 @@ int main() {
         return 1;
     }
 
-    //Aktiviranje thread-a koji salje poruke subscriberima
-    HANDLE consumerThread = CreateThread(NULL, 0, ConsumerThread, 0, 0, NULL);
-    if (consumerThread == NULL) {
-        std::cerr << "Failed to create consumer thread.\n";
+
+    HANDLE heapMonitorThread = CreateThread(NULL, 0, MonitorHeapThread, &pq, 0, NULL);
+    if (heapMonitorThread == NULL) {
+        std::cerr << "Failed to create heap monitor thread.\n";
         closesocket(publisherListenSocket);
         closesocket(subscriberListenSocket);
         WSACleanup();
         return 1;
     }
 
-    std::cout << "Server is listening for publishers on port " << DEFAULT_PORT << "...\n";
-    std::cout << "Server is listening for subscribers on port " << SUBSCRIBER_PORT << "...\n";
-
+    std::cout << "Server is listening for publishers on port: " << DEFAULT_PORT << std::endl;
+    std::cout << "Server is listening for subscribers on port: " << SUBSCRIBER_PORT << std::endl;
+    fflush(stdout);
     SOCKET publisherSocket = accept(publisherListenSocket, NULL, NULL);
     if (publisherSocket != INVALID_SOCKET) {
         std::cout << "Publisher connected.\n";
         HandlePublisher(publisherSocket);
+    }
+
+    WaitForMultipleObjects(THREAD_POOL, consumerThreads, TRUE, INFINITE);
+
+    // Cleanup resources
+    for (int i = 0; i < THREAD_POOL; i++) {
+        CloseHandle(consumerThreads[i]);
     }
 
     closesocket(publisherListenSocket);
@@ -468,6 +550,10 @@ int main() {
     DeleteCriticalSection(&cb.cs);
     CloseHandle(emptySemaphore);
     CloseHandle(fullSemaphore);
+    CloseHandle(heapMonitorThread);
+    CloseHandle(subscriberListenerThread);
+    FreeHeap(&pq);
+  //  CloseHandle(consumerThread);
     WSACleanup();
 
     return 0;

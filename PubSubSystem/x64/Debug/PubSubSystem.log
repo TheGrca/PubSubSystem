@@ -1,7 +1,7 @@
 ﻿  PubSubSystem.cpp
-E:\Faks\IKP\ProjekatTest\PubSubSystem\PubSubSystem.cpp(42,55): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-E:\Faks\IKP\ProjekatTest\PubSubSystem\PubSubSystem.cpp(55,93): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-E:\Faks\IKP\ProjekatTest\PubSubSystem\PubSubSystem.cpp(142,47): warning C4244: '=': conversion from 'time_t' to 'int', possible loss of data
-E:\Faks\IKP\ProjekatTest\PubSubSystem\PubSubSystem.cpp(164,97): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-E:\Faks\IKP\ProjekatTest\PubSubSystem\PubSubSystem.cpp(199,97): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-  PubSubSystem.vcxproj -> E:\Faks\IKP\ProjekatTest\x64\Debug\PubSubService.exe
+C:\Users\Korisnik\Desktop\PubSubSystem\PubSubSystem\PubSubSystem.cpp(42,55): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Korisnik\Desktop\PubSubSystem\PubSubSystem\PubSubSystem.cpp(55,93): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Korisnik\Desktop\PubSubSystem\PubSubSystem\PubSubSystem.cpp(145,47): warning C4244: '=': conversion from 'time_t' to 'int', possible loss of data
+C:\Users\Korisnik\Desktop\PubSubSystem\PubSubSystem\PubSubSystem.cpp(167,97): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Korisnik\Desktop\PubSubSystem\PubSubSystem\PubSubSystem.cpp(202,97): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+  PubSubSystem.vcxproj -> C:\Users\Korisnik\Desktop\PubSubSystem\x64\Debug\PubSubService.exe

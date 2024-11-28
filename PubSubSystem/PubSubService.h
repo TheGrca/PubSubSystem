@@ -7,10 +7,11 @@
 #include <thread>
 #include <mutex>
 
-#define DEFAULT_PORT "27016" 
-#define SUBSCRIBER_PORT "27017"
+#define DEFAULT_PORT "27019" 
+#define SUBSCRIBER_PORT "27020"
 #define BUFFER_SIZE 100
 #define SUBSCRIBER_BUFFER_SIZE 100
+#define THREAD_POOL 4
 
 // PublisherMessage structure
 struct PublisherMessage {
