@@ -50,10 +50,10 @@ void HandleSubscriber(SOCKET clientSocket) {
                     "Location: %d, Topic: %s, Message: %d",
                     pq.heap[i]->location, pq.heap[i]->topic, pq.heap[i]->message);
 
-                EnterCriticalSection(&cb.cs);
+                EnterCriticalSection(&pq.cs);
                 // Now send the formatted message
                 int bytesSent = send(subscriberData->connectSocket, formattedMessage, strlen(formattedMessage), 0);
-                LeaveCriticalSection(&cb.cs);
+                LeaveCriticalSection(&pq.cs);
                 if (bytesSent == SOCKET_ERROR) {
                     printf("Failed to send message to subscriber at location: %d, Error: %d\n",
                         pq.heap[i]->location, WSAGetLastError());
@@ -64,6 +64,7 @@ void HandleSubscriber(SOCKET clientSocket) {
                 
             }
         }
+        printf("***************************************************");
     }
     else {
         printf("Failed to receive subscriber data. Expected size: %zu, Received size: %d\n",
@@ -146,7 +147,7 @@ DWORD WINAPI ConsumerThread(LPVOID param) {
             AddToHeap(&pq, &message);
             cb.tail = (cb.tail + 1) % BUFFER_SIZE;
             cb.size--;
-            LeaveCriticalSection(&cb.cs);
+
 
             ReleaseSemaphore(emptySemaphore, 1, NULL);
 
@@ -213,6 +214,7 @@ DWORD WINAPI ConsumerThread(LPVOID param) {
                     }
                 }
             }
+            LeaveCriticalSection(&cb.cs);
         }
         else {
             LeaveCriticalSection(&cb.cs);
@@ -277,7 +279,7 @@ bool GetFromCircularBuffer(CircularBuffer* cb, PublisherMessage* message) {
 
 void InitializeHeap(ProcessedHeap* pq)
 {
-    for (int i = 0; i < BUFFER_SIZE; i++)
+    for (int i = 0; i < 10000; i++)
     {
         pq->heap[i] = NULL;
     }
@@ -288,8 +290,8 @@ void InitializeHeap(ProcessedHeap* pq)
 bool AddToHeap(ProcessedHeap* heap, PublisherMessage* message) {
     //EnterCriticalSection(&heap->cs);
 
-    if (heap->size == BUFFER_SIZE) {
-        LeaveCriticalSection(&heap->cs);
+    if (heap->size == 10000) {
+        //LeaveCriticalSection(&heap->cs);
         return false; // Heap full
     }
     PublisherMessage* newMessage = (PublisherMessage*)malloc(sizeof(PublisherMessage));
@@ -304,10 +306,12 @@ bool AddToHeap(ProcessedHeap* heap, PublisherMessage* message) {
     int currentIndex = heap->size;
     heap->size++;
 
+    //HeapifyUp(&pq, currentIndex);
     // Bubble-up to maintain heap order (min-heap or max-heap)
+    
     while (currentIndex > 0) {
         int parentIndex = (currentIndex - 1) / 2;
-        if (heap->heap[parentIndex]->location > heap->heap[currentIndex]->location) {
+        if (heap->heap[parentIndex]->expirationTime > heap->heap[currentIndex]->expirationTime) {
             // Swap with parent
             PublisherMessage* temp = heap->heap[parentIndex];
             heap->heap[parentIndex] = heap->heap[currentIndex];
@@ -318,6 +322,7 @@ bool AddToHeap(ProcessedHeap* heap, PublisherMessage* message) {
             break; // Heap property satisfied
         }
     }
+    
     printf("Dodat %d u heap %s\n", newMessage->location, newMessage->topic);
     //LeaveCriticalSection(&heap->cs);
     return true;
@@ -357,6 +362,7 @@ PublisherMessage RemoveFromHeap(ProcessedHeap* pq)
     PublisherMessage item = *pq->heap[0];
     pq->heap[0] = pq->heap[--pq->size];
     HeapifyDown(pq, 0);
+
     return item;
 }
 
@@ -397,11 +403,11 @@ void HeapifyDown(ProcessedHeap* pq, int index)
     int right = 2 * index + 2;
 
     if (left < pq->size
-        && pq->heap[left] < pq->heap[smallest])
+        && pq->heap[left]->expirationTime < pq->heap[smallest]->expirationTime)
         smallest = left;
 
     if (right < pq->size
-        && pq->heap[right] < pq->heap[smallest])
+        && pq->heap[right]->expirationTime < pq->heap[smallest]->expirationTime)
         smallest = right;
 
     if (smallest != index) {
@@ -421,14 +427,13 @@ DWORD WINAPI MonitorHeapThread(LPVOID param) {
     ProcessedHeap* heap = (ProcessedHeap*)param;
 
     while (1) {
-        Sleep(250); // Sleep for 0.2 seconds
+        Sleep(10); // Sleep for 0.2 seconds
 
         EnterCriticalSection(&heap->cs);
 
         if (heap->size > 0) {
             time_t currentTime = time(0);
             PublisherMessage topMessage = peek(heap);
-
             if (currentTime >= topMessage.expirationTime) {
                 PublisherMessage removedMessage = RemoveFromHeap(heap);
                 printf("Message removed: Location: %d, Topic: %s\n",
@@ -539,6 +544,7 @@ int main() {
     }
 
     WaitForMultipleObjects(THREAD_POOL, consumerThreads, TRUE, INFINITE);
+
 
     // Cleanup resources
     for (int i = 0; i < THREAD_POOL; i++) {

@@ -32,7 +32,7 @@ typedef struct {
 } CircularBuffer;
 
 typedef struct {
-    PublisherMessage* heap[BUFFER_SIZE];
+    PublisherMessage* heap[10000];
     int size;
     CRITICAL_SECTION cs;
 } ProcessedHeap;
